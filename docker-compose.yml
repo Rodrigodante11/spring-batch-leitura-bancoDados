@@ -1,19 +1,30 @@
-version: '3'
+version: '3.8'
 
 services:
-  database:
-    restart: always
+  spring_batch_db:
     image: postgres:latest
-    container_name: postgres
+    container_name: spring_batch_db
     environment:
+      POSTGRES_DB: spring_batch
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: spring_batch
     ports:
-      - "5432:5432"  # - local:docker
+      - "5432:5432"
+    networks:
+      - postgres-network
 
-    volumes: # aonde ficara os dados apos derrubar o container
-      - pg-data:/var/lib/postgresql/data
+  app_db:
+    image: postgres:latest
+    container_name: app_db
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    networks:
+      - postgres-network
 
-volumes:
-  pg-data:
+networks:
+  postgres-network:
+    driver: bridge
