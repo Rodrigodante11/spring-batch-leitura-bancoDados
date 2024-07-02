@@ -23,6 +23,9 @@ public class JdbcCursorReaderStepConfig {
                 .<Cliente, Cliente>chunk(1)
                 .reader(jdbcCursorReader)
                 .writer(jdbcCursorWriter)
+                .faultTolerant()
+                .skip(Exception.class) // a excessao que sera permitida
+                .skipLimit(2) // pode skipar ate 2 registros
                 .build();
     }
 }
